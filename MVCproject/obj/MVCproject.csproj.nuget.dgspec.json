@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "D:\\Projects\\MVC-project\\MVCproject\\MVCproject.csproj": {}
+    "D:\\New folder\\MVCproject\\MVCproject.csproj": {}
   },
   "projects": {
-    "D:\\Projects\\MVC-project\\MVCproject\\MVCproject.csproj": {
+    "D:\\New folder\\MVCproject\\MVCproject.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\Projects\\MVC-project\\MVCproject\\MVCproject.csproj",
+        "projectUniqueName": "D:\\New folder\\MVCproject\\MVCproject.csproj",
         "projectName": "MVCproject",
-        "projectPath": "D:\\Projects\\MVC-project\\MVCproject\\MVCproject.csproj",
+        "projectPath": "D:\\New folder\\MVCproject\\MVCproject.csproj",
         "packagesPath": "C:\\Users\\sumit\\.nuget\\packages\\",
-        "outputPath": "D:\\Projects\\MVC-project\\MVCproject\\obj\\",
+        "outputPath": "D:\\New folder\\MVCproject\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -49,6 +49,24 @@
       "frameworks": {
         "net8.0": {
           "targetAlias": "net8.0",
+          "dependencies": {
+            "Microsoft.EntityFrameworkCore.Design": {
+              "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[8.0.20, )"
+            },
+            "Microsoft.EntityFrameworkCore.SqlServer": {
+              "target": "Package",
+              "version": "[8.0.20, )"
+            },
+            "Microsoft.EntityFrameworkCore.Tools": {
+              "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[8.0.20, )"
+            }
+          },
           "imports": [
             "net461",
             "net462",
