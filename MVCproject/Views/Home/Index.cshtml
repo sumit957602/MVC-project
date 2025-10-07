@@ -1,8 +1,123 @@
-﻿@{
+@{
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
+<div class="text-center mb-5">
     <h1 class="display-4">Welcome</h1>
     <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
 </div>
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-lg-6 col-md-8">
+            <form id="vendorForm" novalidate>
+                <div class="mb-3">
+                    <label for="vendorSelect" class="form-label">Select Vendor</label>
+                    <select class="form-select" id="vendorSelect" aria-describedby="vendorHelp" required>
+                        <option value="" selected disabled>Choose a vendor</option>
+                        <option value="vendor1">Vendor 1</option>
+                        <option value="vendor2">Vendor 2</option>
+                        <option value="vendor3">Vendor 3</option>
+                    </select>
+                    <div id="vendorHelp" class="form-text">Choose a vendor to view their submission requirements.</div>
+                </div>
+
+                <div id="vendor1Section" class="border rounded p-3 bg-light mb-3" hidden>
+                    <h2 class="h5">Vendor 1 Upload</h2>
+                    <p class="mb-2">Upload an Excel file (.xls or .xlsx) that contains exactly the following columns:</p>
+                    <ul class="mb-3">
+                        <li>Product Quantity</li>
+                        <li>Product ID</li>
+                        <li>Product Name</li>
+                    </ul>
+                    <div class="mb-3">
+                        <label for="vendor1File" class="form-label">Excel File</label>
+                        <input class="form-control" type="file" id="vendor1File" accept=".xls,.xlsx" />
+                        <div id="fileError" class="text-danger small mt-2"></div>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Upload</button>
+                    <div id="uploadSuccess" class="alert alert-success mt-3 d-none" role="alert"></div>
+                </div>
+
+                <div id="otherVendorMessage" class="alert alert-info" role="alert" hidden>
+                    File upload is only required when Vendor 1 is selected.
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const vendorSelect = document.getElementById("vendorSelect");
+            const vendor1Section = document.getElementById("vendor1Section");
+            const otherVendorMessage = document.getElementById("otherVendorMessage");
+            const fileInput = document.getElementById("vendor1File");
+            const fileError = document.getElementById("fileError");
+            const successAlert = document.getElementById("uploadSuccess");
+            const form = document.getElementById("vendorForm");
+            const allowedExtensions = [".xls", ".xlsx"];
+
+            const resetFeedback = () => {
+                fileError.textContent = "";
+                successAlert.classList.add("d-none");
+                successAlert.textContent = "";
+            };
+
+            const resetFileInput = () => {
+                fileInput.value = "";
+            };
+
+            vendorSelect.addEventListener("change", () => {
+                resetFeedback();
+                if (vendorSelect.value === "vendor1") {
+                    vendor1Section.hidden = false;
+                    otherVendorMessage.hidden = true;
+                } else if (vendorSelect.value) {
+                    vendor1Section.hidden = true;
+                    otherVendorMessage.hidden = false;
+                    resetFileInput();
+                } else {
+                    vendor1Section.hidden = true;
+                    otherVendorMessage.hidden = true;
+                    resetFileInput();
+                }
+            });
+
+            fileInput.addEventListener("change", () => {
+                resetFeedback();
+                const file = fileInput.files[0];
+                if (!file) {
+                    return;
+                }
+
+                const fileName = file.name.toLowerCase();
+                const isValidExtension = allowedExtensions.some(ext => fileName.endsWith(ext));
+
+                if (!isValidExtension) {
+                    fileError.textContent = "Please upload an Excel file with a .xls or .xlsx extension.";
+                    resetFileInput();
+                }
+            });
+
+            form.addEventListener("submit", (event) => {
+                event.preventDefault();
+                resetFeedback();
+
+                if (vendorSelect.value !== "vendor1") {
+                    return;
+                }
+
+                if (!fileInput.files.length) {
+                    fileError.textContent = "Please select an Excel file before uploading.";
+                    return;
+                }
+
+                const file = fileInput.files[0];
+                successAlert.textContent = `File "${file.name}" is ready to upload.`;
+                successAlert.classList.remove("d-none");
+            });
+        });
+    </script>
+}
