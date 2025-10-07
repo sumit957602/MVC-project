@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "D:\\New folder\\MVCproject\\MVCproject.csproj": {}
+    "D:\\Projects\\MVC-project\\MVCproject\\MVCproject.csproj": {}
   },
   "projects": {
-    "D:\\New folder\\MVCproject\\MVCproject.csproj": {
+    "D:\\Projects\\MVC-project\\MVCproject\\MVCproject.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\New folder\\MVCproject\\MVCproject.csproj",
+        "projectUniqueName": "D:\\Projects\\MVC-project\\MVCproject\\MVCproject.csproj",
         "projectName": "MVCproject",
-        "projectPath": "D:\\New folder\\MVCproject\\MVCproject.csproj",
+        "projectPath": "D:\\Projects\\MVC-project\\MVCproject\\MVCproject.csproj",
         "packagesPath": "C:\\Users\\sumit\\.nuget\\packages\\",
-        "outputPath": "D:\\New folder\\MVCproject\\obj\\",
+        "outputPath": "D:\\Projects\\MVC-project\\MVCproject\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
