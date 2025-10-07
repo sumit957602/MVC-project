@@ -1,4 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using MVCproject.Models;
+
 
 namespace MVCproject.Data
 {
@@ -9,7 +11,7 @@ namespace MVCproject.Data
         {
         }
 
-        //public DbSet<Vendor> Vendor { get; set; }
-        
-        }
+        public DbSet<Vendor> Vendors { get; set; }
+
+    }
 }

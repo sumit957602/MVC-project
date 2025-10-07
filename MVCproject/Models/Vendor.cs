@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace MVCproject
+namespace MVCproject.Models
 {
     public class Vendor
     {
