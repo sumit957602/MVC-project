@@ -44,6 +44,7 @@
 </div>
 
 @section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
     <script>
         document.addEventListener("DOMContentLoaded", function () {
             const vendorSelect = document.getElementById("vendorSelect");
@@ -54,6 +55,8 @@
             const successAlert = document.getElementById("uploadSuccess");
             const form = document.getElementById("vendorForm");
             const allowedExtensions = [".xls", ".xlsx"];
+            const requiredHeaders = ["product quantity", "product id", "product name"];
+            let parsedFileData = null;
 
             const resetFeedback = () => {
                 fileError.textContent = "";
@@ -63,6 +66,14 @@
 
             const resetFileInput = () => {
                 fileInput.value = "";
+                parsedFileData = null;
+            };
+
+            const displayError = (message) => {
+                fileError.textContent = message;
+                successAlert.classList.add("d-none");
+                successAlert.textContent = "";
+                resetFileInput();
             };
 
             vendorSelect.addEventListener("change", () => {
@@ -92,9 +103,81 @@
                 const isValidExtension = allowedExtensions.some(ext => fileName.endsWith(ext));
 
                 if (!isValidExtension) {
-                    fileError.textContent = "Please upload an Excel file with a .xls or .xlsx extension.";
-                    resetFileInput();
+                    displayError("Please upload an Excel file with a .xls or .xlsx extension.");
+                    return;
                 }
+
+                const reader = new FileReader();
+                reader.onload = (event) => {
+                    try {
+                        const data = new Uint8Array(event.target.result);
+                        const workbook = XLSX.read(data, { type: "array" });
+
+                        if (!workbook.SheetNames.length) {
+                            throw new Error("The uploaded workbook does not contain any sheets.");
+                        }
+
+                        const firstSheet = workbook.Sheets[workbook.SheetNames[0]];
+                        const rows = XLSX.utils.sheet_to_json(firstSheet, { header: 1, defval: "" });
+
+                        if (!rows.length) {
+                            throw new Error("The first sheet of the workbook is empty.");
+                        }
+
+                        const headers = rows[0].map(header => String(header).trim().toLowerCase());
+                        const normalizedHeaders = requiredHeaders.map((_, index) => headers[index] ?? "");
+                        const hasMissingHeaders = normalizedHeaders.some(value => value === "");
+                        const extraHeaderData = headers.slice(requiredHeaders.length).some(value => value !== "");
+
+                        if (hasMissingHeaders || extraHeaderData || !requiredHeaders.every((header, index) => normalizedHeaders[index] === header)) {
+                            throw new Error("The Excel file must include only the columns Product Quantity, Product ID, and Product Name in this order.");
+                        }
+
+                        const dataRows = rows.slice(1).filter(row => row.some(cell => String(cell).trim() !== ""));
+
+                        if (!dataRows.length) {
+                            throw new Error("The Excel file must contain at least one data row.");
+                        }
+
+                        const formattedRows = dataRows.map((row, rowIndex) => {
+                            const extraColumnData = row.slice(requiredHeaders.length).some(value => String(value).trim() !== "");
+                            if (extraColumnData) {
+                                throw new Error(`Row ${rowIndex + 2} contains more than the required three columns.`);
+                            }
+
+                            const [quantity, id, name] = requiredHeaders.map((_, index) => row[index] ?? "");
+
+                            const hasEmptyField = [quantity, id, name].some(value => String(value).trim() === "");
+
+                            if (hasEmptyField) {
+                                throw new Error(`Row ${rowIndex + 2} must have values for Product Quantity, Product ID, and Product Name.`);
+                            }
+
+                            return {
+                                productQuantity: quantity,
+                                productId: id,
+                                productName: name
+                            };
+                        });
+
+                        parsedFileData = {
+                            fileName: file.name,
+                            uploadedAt: new Date().toISOString(),
+                            rows: formattedRows
+                        };
+
+                        successAlert.textContent = `File "${file.name}" validated successfully. Click Upload to save.`;
+                        successAlert.classList.remove("d-none");
+                    } catch (error) {
+                        displayError(error.message);
+                    }
+                };
+
+                reader.onerror = () => {
+                    displayError("An error occurred while reading the file. Please try again.");
+                };
+
+                reader.readAsArrayBuffer(file);
             });
 
             form.addEventListener("submit", (event) => {
@@ -105,14 +188,19 @@
                     return;
                 }
 
-                if (!fileInput.files.length) {
-                    fileError.textContent = "Please select an Excel file before uploading.";
+                if (!parsedFileData) {
+                    fileError.textContent = "Please select and validate an Excel file before uploading.";
                     return;
                 }
 
-                const file = fileInput.files[0];
-                successAlert.textContent = `File "${file.name}" is ready to upload.`;
-                successAlert.classList.remove("d-none");
+                try {
+                    localStorage.setItem("vendor1Upload", JSON.stringify(parsedFileData));
+                    successAlert.textContent = `File "${parsedFileData.fileName}" has been saved to local storage.`;
+                    successAlert.classList.remove("d-none");
+                    resetFileInput();
+                } catch (error) {
+                    fileError.textContent = "Unable to save the file to local storage. Please check your browser settings.";
+                }
             });
         });
     </script>
