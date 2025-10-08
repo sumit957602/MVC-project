@@ -6,7 +6,8 @@
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-lg-6 col-md-8">
-            <form id="vendorForm" novalidate>
+            <form id="vendorForm" asp-action="UploadVendorFile" asp-controller="Home" method="post" enctype="multipart/form-data" novalidate>
+                @Html.AntiForgeryToken()
                 <div class="mb-3">
                     <label for="vendorSelect" class="form-label">Select Vendor</label>
                     <select class="form-select" id="vendorSelect" aria-describedby="vendorHelp" required>
@@ -28,7 +29,7 @@
                     </ul>
                     <div class="mb-3">
                         <label for="vendor1File" class="form-label">Excel File</label>
-                        <input class="form-control" type="file" id="vendor1File" accept=".xls,.xlsx" />
+                        <input class="form-control" type="file" id="vendor1File" name="vendorFile" accept=".xls,.xlsx" />
                         <div id="fileError" class="text-danger small mt-2"></div>
                     </div>
                     <button type="submit" class="btn btn-primary">Upload</button>
@@ -56,7 +57,10 @@
             const form = document.getElementById("vendorForm");
             const allowedExtensions = [".xls", ".xlsx"];
             const requiredHeaders = ["product quantity", "product id", "product name"];
-            let parsedFileData = null;
+            const antiForgeryTokenInput = form.querySelector('input[name="__RequestVerificationToken"]');
+            const uploadUrl = form.getAttribute("action");
+            let isFileValidated = false;
+            let lastValidatedFileName = "";
 
             const resetFeedback = () => {
                 fileError.textContent = "";
@@ -66,7 +70,8 @@
 
             const resetFileInput = () => {
                 fileInput.value = "";
-                parsedFileData = null;
+                isFileValidated = false;
+                lastValidatedFileName = "";
             };
 
             const displayError = (message) => {
@@ -94,6 +99,8 @@
 
             fileInput.addEventListener("change", () => {
                 resetFeedback();
+                isFileValidated = false;
+                lastValidatedFileName = "";
                 const file = fileInput.files[0];
                 if (!file) {
                     return;
@@ -139,7 +146,7 @@
                             throw new Error("The Excel file must contain at least one data row.");
                         }
 
-                        const formattedRows = dataRows.map((row, rowIndex) => {
+                        dataRows.forEach((row, rowIndex) => {
                             const extraColumnData = row.slice(requiredHeaders.length).some(value => String(value).trim() !== "");
                             if (extraColumnData) {
                                 throw new Error(`Row ${rowIndex + 2} contains more than the required three columns.`);
@@ -152,20 +159,10 @@
                             if (hasEmptyField) {
                                 throw new Error(`Row ${rowIndex + 2} must have values for Product Quantity, Product ID, and Product Name.`);
                             }
-
-                            return {
-                                productQuantity: quantity,
-                                productId: id,
-                                productName: name
-                            };
                         });
 
-                        parsedFileData = {
-                            fileName: file.name,
-                            uploadedAt: new Date().toISOString(),
-                            rows: formattedRows
-                        };
-
+                        isFileValidated = true;
+                        lastValidatedFileName = file.name;
                         successAlert.textContent = `File "${file.name}" validated successfully. Click Upload to save.`;
                         successAlert.classList.remove("d-none");
                     } catch (error) {
@@ -180,7 +177,7 @@
                 reader.readAsArrayBuffer(file);
             });
 
-            form.addEventListener("submit", (event) => {
+            form.addEventListener("submit", async (event) => {
                 event.preventDefault();
                 resetFeedback();
 
@@ -188,18 +185,48 @@
                     return;
                 }
 
-                if (!parsedFileData) {
+                if (!isFileValidated) {
                     fileError.textContent = "Please select and validate an Excel file before uploading.";
                     return;
                 }
 
+                if (!fileInput.files.length) {
+                    displayError("Please choose the validated file again before uploading.");
+                    return;
+                }
+
+                if (!uploadUrl) {
+                    displayError("Upload endpoint is not configured.");
+                    return;
+                }
+
+                const formData = new FormData();
+                formData.append("vendorFile", fileInput.files[0]);
+
+                const headers = {};
+                if (antiForgeryTokenInput && antiForgeryTokenInput.value) {
+                    headers["RequestVerificationToken"] = antiForgeryTokenInput.value;
+                }
+
                 try {
-                    localStorage.setItem("vendor1Upload", JSON.stringify(parsedFileData));
-                    successAlert.textContent = `File "${parsedFileData.fileName}" has been saved to local storage.`;
+                    const response = await fetch(uploadUrl, {
+                        method: "POST",
+                        headers,
+                        body: formData
+                    });
+
+                    if (!response.ok) {
+                        const errorData = await response.json().catch(() => null);
+                        displayError(errorData?.message ?? "Failed to upload the file.");
+                        return;
+                    }
+
+                    const result = await response.json().catch(() => null);
+                    successAlert.textContent = result?.message ?? `File "${lastValidatedFileName}" uploaded successfully.`;
                     successAlert.classList.remove("d-none");
                     resetFileInput();
                 } catch (error) {
-                    fileError.textContent = "Unable to save the file to local storage. Please check your browser settings.";
+                    displayError("An unexpected error occurred while uploading the file. Please try again.");
                 }
             });
         });
