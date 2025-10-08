@@ -3,16 +3,16 @@
   "WorkspaceRootPath": "D:\\Projects\\MVC-project\\MVCproject\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{E2C6C4B8-1824-40C2-B182-2DD386CC0220}|MVCproject.csproj|d:\\projects\\mvc-project\\mvcproject\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E2C6C4B8-1824-40C2-B182-2DD386CC0220}|MVCproject.csproj|solutionrelative:program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{E2C6C4B8-1824-40C2-B182-2DD386CC0220}|MVCproject.csproj|d:\\projects\\mvc-project\\mvcproject\\views\\home\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
       "RelativeMoniker": "D:0:0:{E2C6C4B8-1824-40C2-B182-2DD386CC0220}|MVCproject.csproj|solutionrelative:views\\home\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{E2C6C4B8-1824-40C2-B182-2DD386CC0220}|MVCproject.csproj|d:\\projects\\mvc-project\\mvcproject\\controllers\\homecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{E2C6C4B8-1824-40C2-B182-2DD386CC0220}|MVCproject.csproj|solutionrelative:controllers\\homecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{E2C6C4B8-1824-40C2-B182-2DD386CC0220}|MVCproject.csproj|d:\\projects\\mvc-project\\mvcproject\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{E2C6C4B8-1824-40C2-B182-2DD386CC0220}|MVCproject.csproj|solutionrelative:program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{E2C6C4B8-1824-40C2-B182-2DD386CC0220}|MVCproject.csproj|d:\\projects\\mvc-project\\mvcproject\\models\\vendor.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -34,7 +34,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 5,
+          "SelectedChildIndex": 8,
           "Children": [
             {
               "$type": "Bookmark",
@@ -54,7 +54,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 2,
               "Title": "HomeController.cs",
               "DocumentMoniker": "D:\\Projects\\MVC-project\\MVCproject\\Controllers\\HomeController.cs",
               "RelativeDocumentMoniker": "Controllers\\HomeController.cs",
@@ -62,18 +62,17 @@
               "RelativeToolTip": "Controllers\\HomeController.cs",
               "ViewState": "AgIAAAoAAAAAAAAAAAAzwCAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-10-07T11:20:11.654Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-10-07T11:20:11.654Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 1,
               "Title": "Index.cshtml",
               "DocumentMoniker": "D:\\Projects\\MVC-project\\MVCproject\\Views\\Home\\Index.cshtml",
               "RelativeDocumentMoniker": "Views\\Home\\Index.cshtml",
               "ToolTip": "D:\\Projects\\MVC-project\\MVCproject\\Views\\Home\\Index.cshtml",
               "RelativeToolTip": "Views\\Home\\Index.cshtml",
-              "ViewState": "AgIAALoAAAAAAAAAAAAAAAMAAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAMAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
               "WhenOpened": "2025-10-07T11:15:54.416Z",
               "EditorCaption": ""
@@ -104,15 +103,16 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 0,
               "Title": "Program.cs",
               "DocumentMoniker": "D:\\Projects\\MVC-project\\MVCproject\\Program.cs",
               "RelativeDocumentMoniker": "Program.cs",
               "ToolTip": "D:\\Projects\\MVC-project\\MVCproject\\Program.cs",
               "RelativeToolTip": "Program.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABYAAAAaAAAAAAAAAA==",
+              "ViewState": "AgIAAAMAAAAAAAAAAAAwwA4AAAAuAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-10-07T10:51:48.037Z"
+              "WhenOpened": "2025-10-07T10:51:48.037Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
